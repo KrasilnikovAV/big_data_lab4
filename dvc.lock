@@ -1,0 +1,52 @@
+schema: '2.0'
+stages:
+  train_model:
+    cmd: python scripts/train_model.py --config config.ini --output-model 
+      artifacts/model.joblib --metrics artifacts/metrics.json --submission 
+      artifacts/submission.csv
+    deps:
+    - path: config.ini
+      hash: md5
+      md5: 687aa01cbf45f025812e0235ea97bbc3
+      size: 360
+    - path: data/BBC News Test.csv
+      hash: md5
+      md5: e41c04a4fbdc48520cac9f963ae265e5
+      size: 1712432
+    - path: data/BBC News Train.csv
+      hash: md5
+      md5: 53d0cfd05cbadfe6ed367c633294f967
+      size: 3351206
+    - path: scripts/train_model.py
+      hash: md5
+      md5: a354b3faa63fc7f7e1e8b8d1374b4519
+      size: 289
+    - path: src/bbc_news/config.py
+      hash: md5
+      md5: 136481c086878c98260190679a4143d3
+      size: 2756
+    - path: src/bbc_news/data.py
+      hash: md5
+      md5: 5260cc576d83897f3df1efd0a41c41b1
+      size: 1582
+    - path: src/bbc_news/model.py
+      hash: md5
+      md5: 90309ea7b531330623fb1b098d1b36ba
+      size: 1186
+    - path: src/bbc_news/train.py
+      hash: md5
+      md5: aa8d59574407d0f36d746cdbfc9f8f30
+      size: 3620
+    outs:
+    - path: artifacts/metrics.json
+      hash: md5
+      md5: a60c19c3f03f4738de0c5193178ce3c1
+      size: 155
+    - path: artifacts/model.joblib
+      hash: md5
+      md5: e47c529902a32a227f61f9202da9b263
+      size: 4106128
+    - path: artifacts/submission.csv
+      hash: md5
+      md5: 1ed3918f847f70944f2d9ff58b8ba02a
+      size: 10185

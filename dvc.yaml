@@ -1,0 +1,17 @@
+stages:
+  train_model:
+    cmd: python scripts/train_model.py --config config.ini --output-model artifacts/model.joblib --metrics artifacts/metrics.json --submission artifacts/submission.csv
+    deps:
+      - config.ini
+      - data/BBC News Train.csv
+      - data/BBC News Test.csv
+      - src/bbc_news/config.py
+      - src/bbc_news/data.py
+      - src/bbc_news/model.py
+      - src/bbc_news/train.py
+      - scripts/train_model.py
+    outs:
+      - artifacts/model.joblib
+      - artifacts/submission.csv
+    metrics:
+      - artifacts/metrics.json

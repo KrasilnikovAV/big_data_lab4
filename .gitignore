@@ -1,0 +1,24 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.env
+.env.local
+secrets/.vault_pass.txt
+secrets/runtime/
+.pytest_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+
+# Build artifacts
+artifacts/
+dist/
+build/
+
+# DVC cache
+.dvc/cache/
+
+# IDE
+.idea/
+.vscode/
