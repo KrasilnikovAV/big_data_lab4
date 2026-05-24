@@ -1,0 +1,16 @@
+fastapi==0.115.12
+uvicorn==0.34.0
+pandas==2.2.3
+scikit-learn==1.6.1
+joblib==1.4.2
+pytest==8.3.5
+pytest-cov==6.0.0
+httpx==0.28.1
+requests==2.32.3
+dvc==3.59.1
+pathspec==0.12.1
+PyYAML==6.0.2
+clickhouse-connect==0.15.1
+ansible-core==2.18.5
+Pygments==2.20.0
+kafka-python==2.3.1
