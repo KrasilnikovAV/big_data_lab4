@@ -1,0 +1,34 @@
+{
+  "base_url": "http://localhost:8000",
+  "checks": [
+    {
+      "name": "health_check",
+      "method": "GET",
+      "path": "/health",
+      "expected_status": 200,
+      "contains": "ok"
+    },
+    {
+      "name": "predict_batch",
+      "method": "POST",
+      "path": "/predict",
+      "expected_status": 200,
+      "json": {
+        "texts": [
+          "The team won the football match in final minute.",
+          "Stock market closed with strong growth today."
+        ]
+      },
+      "expected_json_path": "predictions",
+      "expected_length": 2
+    },
+    {
+      "name": "prediction_logs_saved",
+      "method": "GET",
+      "path": "/predictions?limit=2",
+      "expected_status": 200,
+      "expected_json_path": "records",
+      "expected_length": 2
+    }
+  ]
+}

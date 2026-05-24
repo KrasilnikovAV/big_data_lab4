@@ -1,0 +1,73 @@
+name: cd
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 7 * * 1"
+  workflow_run:
+    workflows:
+      - ci
+    types:
+      - completed
+
+jobs:
+  deploy-and-functional-test:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (workflow_run head)
+        if: github.event_name == 'workflow_run'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Checkout (current ref)
+        if: github.event_name != 'workflow_run'
+        uses: actions/checkout@v4
+
+      - name: Prepare vault password file
+        run: |
+          test -n "${{ secrets.ANSIBLE_VAULT_PASSWORD }}"
+          mkdir -p secrets
+          printf '%s' "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > secrets/.vault_pass.txt
+          chmod 600 secrets/.vault_pass.txt
+
+      - name: Start containers
+        run: |
+          docker compose up -d --build || {
+            docker compose logs vault-bootstrap clickhouse kafka kafka-init bbc-news-api kafka-consumer
+            exit 1
+          }
+
+      - name: Wait for service
+        run: |
+          for i in {1..30}; do
+            if curl -fsS http://localhost:8000/health > /dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          docker compose logs
+          exit 1
+
+      - name: Load train and test data into ClickHouse
+        run: |
+          docker compose exec -T bbc-news-api \
+            python scripts/load_clickhouse_data.py --config /app/config.ini
+
+      - name: Run functional scenario
+        run: |
+          docker compose exec -T bbc-news-api \
+            python scripts/run_scenario.py --scenario /app/scenario.json --base-url http://127.0.0.1:8000
+
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs
+
+      - name: Stop containers
+        if: always()
+        run: docker compose down
+
+      - name: Remove vault password file
+        if: always()
+        run: rm -f secrets/.vault_pass.txt
