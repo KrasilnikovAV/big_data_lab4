@@ -1,4 +1,4 @@
-generated_at_utc: '2026-05-24T14:00:14.509842+00:00'
+generated_at_utc: '2026-05-24T14:03:23.696885+00:00'
 docker_image:
   name: local/bbc-news-classifier_v4:latest
   digest: sha256:pending
@@ -7,10 +7,10 @@ docker_image:
     status: pending_if_not_signed
 repository:
   last_5_commits:
-  - N/A
-  - N/A
-  - N/A
-  - N/A
+  - b1eb2d25b7f68dfe5993f6f7be8dbf6e82662287
+  - 820af02b777693e44e83b280fba5807a1bf5404f
+  - 9aee00b4e8608bd7e58d1a41b8979f689c708c2f
+  - 54b96dffc282b7df9baaa8ddd4003e2225ca7154
   - N/A
 quality:
   test_coverage_percent: 84.01
