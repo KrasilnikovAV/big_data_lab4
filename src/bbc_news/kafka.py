@@ -201,7 +201,7 @@ class KafkaPredictionProducer:
         from kafka import KafkaProducer
 
         return KafkaProducer(
-            bootstrap_servers=_split_bootstrap_servers(self.settings.bootstrap_servers),
+            bootstrap_servers=split_bootstrap_servers(self.settings.bootstrap_servers),
             client_id=self.settings.producer_client_id,
             value_serializer=lambda payload: json.dumps(payload, ensure_ascii=False).encode(
                 "utf-8"
@@ -212,7 +212,7 @@ class KafkaPredictionProducer:
         )
 
 
-def _split_bootstrap_servers(value: str) -> list[str]:
+def split_bootstrap_servers(value: str) -> list[str]:
     servers = [server.strip() for server in value.split(",") if server.strip()]
     if not servers:
         raise ValueError("KAFKA_BOOTSTRAP_SERVERS must contain at least one host:port pair.")

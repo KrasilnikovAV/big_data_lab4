@@ -10,6 +10,7 @@ from .kafka import (
     deserialize_prediction_event,
     load_kafka_settings,
     prediction_event_to_record,
+    split_bootstrap_servers,
 )
 from .storage import ClickHousePredictionStore, PredictionStore, load_clickhouse_settings
 
@@ -81,7 +82,7 @@ class KafkaPredictionConsumerService:
 
         return KafkaConsumer(
             self.settings.predictions_topic,
-            bootstrap_servers=_split_bootstrap_servers(self.settings.bootstrap_servers),
+            bootstrap_servers=split_bootstrap_servers(self.settings.bootstrap_servers),
             group_id=self.settings.consumer_group,
             client_id=self.settings.consumer_client_id,
             auto_offset_reset=self.settings.auto_offset_reset,
@@ -107,14 +108,5 @@ def main(argv: list[str] | None = None) -> int:
     service = KafkaPredictionConsumerService()
     service.run(max_messages=max(0, args.max_messages))
     return 0
-
-
-def _split_bootstrap_servers(value: str) -> list[str]:
-    servers = [server.strip() for server in value.split(",") if server.strip()]
-    if not servers:
-        raise ValueError("KAFKA_BOOTSTRAP_SERVERS must contain at least one host:port pair.")
-    return servers
-
-
 if __name__ == "__main__":
     raise SystemExit(main())
